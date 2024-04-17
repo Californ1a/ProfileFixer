@@ -61,6 +61,7 @@ namespace ProfileFixer
         private void RunProfileChecker()
         {
             if (isChecking) return; // Don't try to run the profile checker while it's still asking which modes to restore.
+            if (!GameManager.IsInMainMenuScene_) return;
             ProfileProgress currentProgress = G.Sys.ProfileManager_.CurrentProfileProgress_;
             isChecking = true;
             Ask.UseAchievements(currentProgress);
