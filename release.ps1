@@ -12,15 +12,14 @@ foreach($target in ("BepInEx5"))
 
     Remove-Item -Force -Path ($copy) -Recurse -ErrorAction SilentlyContinue
     New-Item -ItemType Directory -Force -Path ($copy)
-    
-    Copy-Item -Path ($dir + $target + "\*") -Destination ($copy) -Recurse -Force
-    Remove-Item -Force -Path ($copy + "\*.deps.json") -Recurse -ErrorAction SilentlyContinue
+
+	Copy-Item -Path ($PSScriptRoot + "\ProfileFixer\bin\Debug\ProfileFixer.dll") -Destination ($copy) -Recurse -Force
 
     Copy-Item -Path ($dir + "\..\README.md") -Destination ($copy) -Recurse -Force
     Copy-Item -Path ($dir + "\..\LICENSE") -Destination ($copy) -Recurse -Force
 
-    $ver = (Get-ChildItem -Path ($dir + $target) -Filter ("*ProfileFixer.dll") -Recurse -Force)[0].VersionInfo.FileVersion.ToString() -replace "([\d+\.]+?\d+)[\.0]*$", '${1}'
-    Compress-Archive -Path ($dir + "copy\BepInEx") -Force -CompressionLevel "Optimal" -DestinationPath ($dir + "Distance.ProfileFixer." + $target +"_v" + $ver + ".zip")
+    $ver = (Get-ChildItem -Path ($PSScriptRoot + "\ProfileFixer\bin\") -Filter ("*ProfileFixer.dll") -Recurse -Force)[0].VersionInfo.FileVersion.ToString() -replace "([\d+\.]+?\d+)[\.0]*$", '${1}'
+    Compress-Archive -Path ($dir + "copy\BepInEx") -Force -CompressionLevel "Optimal" -DestinationPath ($dir + "Distance.ProfileFixer" +"_v" + $ver + ".zip")
 }
 
 Remove-Item -Force -Path ($dir + "copy") -Recurse -ErrorAction SilentlyContinue
