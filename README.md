@@ -9,5 +9,5 @@ To use:
 3. Unzip it into Distance's root
 4. Run the game
 5. Go to Options->Profiles and make sure the current profile is the one you want to attempt to restore (the one with `(selected)` next to it).
-5. On the main menu, hit `LeftCtrl + RightShift + P`
-6. Follow the prompts
+6. On the main menu, hit `LeftCtrl + RightShift + P`
+7. Follow the prompts
