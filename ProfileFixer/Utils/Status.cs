@@ -9,54 +9,54 @@ namespace ProfileFixer.Utils
     {
         internal static MedalStatus GetMedalStatusBasedOnLeaderboard(string levelPath, GameModeID modeID)
         {
-            MedalStatus status = MedalStatus.None;
+            MedalStatus medalStatus = MedalStatus.None;
             Profile currentProfile = G.Sys.ProfileManager_.CurrentProfile_;
             LevelInfo levelInfo = G.Sys.LevelSets_.GetLevelInfo(levelPath);
-            List<ResultInfo> list = null;
+            List<ResultInfo> resultsList = null;
             LocalLeaderboard localLeaderboard = LocalLeaderboard.Load(levelPath, modeID);
             if (localLeaderboard != null)
             {
-                list = new List<ResultInfo>(localLeaderboard.Results_);
+                resultsList = new List<ResultInfo>(localLeaderboard.Results_);
             }
-            if (list != null && list.Count > 0)
+            if (resultsList != null && resultsList.Count > 0)
             {
-                bool flag = false;
+                bool hasValidResult = false;
                 if (modeID.IsTimeBased())
                 {
-                    int num = int.MaxValue;
-                    foreach (ResultInfo resultInfo in list)
+                    int minTime = int.MaxValue;
+                    foreach (ResultInfo resultInfo in resultsList)
                     {
                         if (resultInfo.ProfileID_ == currentProfile.ProfileID_ || resultInfo.ProfileName_ == currentProfile.Name_)
                         {
-                            flag = true;
-                            if (resultInfo.Value_ < num)
+                            hasValidResult = true;
+                            if (resultInfo.Value_ < minTime)
                             {
-                                num = resultInfo.Value_;
+                                minTime = resultInfo.Value_;
                             }
                         }
                     }
-                    if (flag)
+                    if (hasValidResult)
                     {
-                        status = GameMode.EvaluateMedalStatus(modeID, levelInfo, (double)num);
+                        medalStatus = GameMode.EvaluateMedalStatus(modeID, levelInfo, (double)minTime);
                     }
                 }
                 else if (modeID.IsPointsBased())
                 {
-                    int num2 = -2;
-                    foreach (ResultInfo resultInfo2 in list)
+                    int maxPoints = -2;
+                    foreach (ResultInfo resultInfo in resultsList)
                     {
-                        if (resultInfo2.ProfileID_ == currentProfile.ProfileID_ || resultInfo2.ProfileName_ == currentProfile.Name_)
+                        if (resultInfo.ProfileID_ == currentProfile.ProfileID_ || resultInfo.ProfileName_ == currentProfile.Name_)
                         {
-                            flag = true;
-                            if (resultInfo2.Value_ > num2)
+                            hasValidResult = true;
+                            if (resultInfo.Value_ > maxPoints)
                             {
-                                num2 = resultInfo2.Value_;
+                                maxPoints = resultInfo.Value_;
                             }
                         }
                     }
-                    if (flag)
+                    if (hasValidResult)
                     {
-                        status = GameMode.EvaluateMedalStatus(modeID, levelInfo, (double)num2);
+                        medalStatus = GameMode.EvaluateMedalStatus(modeID, levelInfo, (double)maxPoints);
                     }
                 }
             }
@@ -64,7 +64,7 @@ namespace ProfileFixer.Utils
             {
                 UnityEngine.Object.Destroy(localLeaderboard.gameObject);
             }
-            return status;
+            return medalStatus;
         }
     }
 }
